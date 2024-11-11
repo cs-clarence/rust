@@ -105,7 +105,7 @@ pub fn get_result_from_exit_code(
         Some(STATUS_FAIL_FAST_EXCEPTION) => TestResult::TrFailed,
         #[cfg(unix)]
         None => match status.signal() {
-            Some(libc::SIGABRT) => TestResult::TrFailed,
+            Some(signal) if signal == (libc::SIGABRT as i32) => TestResult::TrFailed,
             Some(signal) => {
                 TestResult::TrFailedMsg(format!("child process exited with signal {signal}"))
             }
